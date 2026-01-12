@@ -1,0 +1,27 @@
+/**
+ * Configuração do tema Tailwind CSS
+ * 
+ * Customiza apenas as cores específicas do projeto.
+ * O resto usa as cores nativas do Tailwind.
+ */
+
+@theme inline {
+  /* Primary: Blue customizado */
+  --color-primary: #1876D2;
+  
+  /* Dark: Gray-900 customizado */
+  --color-dark-900: #0B1125;
+  
+  /* Gold: Yellow customizado */
+  --color-gold: #D2B843;
+  
+  /* Light: White customizado */
+  --color-light: #E0F7FF;
+  
+  /* Error: Red customizado */
+  --color-error: #BA1A1A;
+  
+  /* Fontes */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
