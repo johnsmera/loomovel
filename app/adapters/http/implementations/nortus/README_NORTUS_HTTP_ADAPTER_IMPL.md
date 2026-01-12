@@ -1,85 +1,100 @@
-## Autenticação
+# NortusHttpAdapter
 
-A API da Nortus utiliza autenticação via JWT para acesso às rotas protegidas.
+Adapter HTTP simples para realizar requisições à API Nortus. Este adapter não gerencia autenticação - essa responsabilidade é de outra camada da aplicação.
 
-Essa responsabilidade é centralizada no HTTP Adapter, que fica encarregado de:
-- Realizar o login inicial
-- Reutilizar o token nas demais requisições
-- Prever a expiração do token e renovar a autenticação quando necessário
+## Motivação
 
-Dessa forma, a aplicação não precisa lidar diretamente com lógica de autenticação em cada chamada à API.
+A criação deste adapter HTTP segue o padrão **Adapter Pattern** e tem como principais motivações:
 
-### Configurações
+### Testabilidade
 
-As credenciais e URLs de autenticação são definidas via variáveis de ambiente:
+**Principal benefício**: O adapter permite **mockar facilmente requisições HTTP em testes**, isolando a lógica de negócio das chamadas de rede.
 
-- `NORTUS_AUTH_BASE_URL`
-- `NORTUS_AUTH_LOGIN_USER`
-- `NORTUS_AUTH_LOGIN_PASSWORD`
-
-
-### Login
-
-**POST** `/auth/login`
-
-Exemplo de payload:
-
-```json
-{
-  "email": "user@exemplo.com",
-  "password": "senha"
-}
-
-
-O retorno é:
-
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
+Exemplo de teste simplificado:
+```typescript
+// Mock do adapter em vez de mockar fetch globalmente
+const mockAdapter = {
+  get: vi.fn().mockResolvedValue({ data: 'test' })
+};
 ```
 
-**Importante:** A API não retorna dados de expiração do token, apenas o token JWT.
+### Abstração e Flexibilidade
 
-## Decisão de Arquitetura
+- **Abstração**: Encapsula detalhes de implementação HTTP (fetch, headers, retries)
+- **Flexibilidade**: Permite trocar a implementação HTTP sem impactar o código que usa o adapter
+- **Reutilização**: Lógica de retries e tratamento de erros centralizada
 
-Como a API não retorna informações sobre a expiração do token, existem duas abordagens possíveis:
+### Manutenibilidade
 
-### Opção 1: Decodificar o JWT
-- **Vantagem:** Renovação proativa antes da expiração, evitando requisições com token expirado
-- **Desvantagem:** Requer processamento adicional para decodificar o token e extrair o `exp`
-- **Dependência:** Biblioteca para decodificar JWT (ex: `jose`, `jsonwebtoken`)
+- **Responsabilidade única**: Foca apenas em comunicação HTTP
+- **Código testado**: Lógica de retries e tratamento de erros é coberta por testes específicos
+- **Evolução**: Facilita adicionar funcionalidades (timeout, interceptors, etc.) sem impactar o restante da aplicação
 
-### Opção 2: Detectar 401 e Renovar
-- **Vantagem:** Implementação mais simples, sem dependências extras
-- **Desvantagem:** Requer uma requisição adicional quando o token expira (latência/rede)
-- **Dependência:** Nenhuma
+## Características
 
-**Decisão:** Optamos pela **Opção 2** (detectar 401 e renovar), pois:
-- Simplifica a implementação
-- Evita dependências extras
-- O overhead de uma requisição adicional é aceitável considerando que tokens JWT geralmente têm tempo de expiração longo
-- A renovação acontece apenas quando necessário (lazy renewal)
+- Implementa métodos HTTP básicos (GET, POST, PUT, DELETE)
+- Suporte a retries automáticos para erros transient (5xx)
+- Não possui lógica de autenticação interna
 
-## Proteção contra Loops Infinitos
+## Uso
 
-### Problema Identificado
+### Inicialização
 
-Em cenários onde:
-- O token está inválido/expirado
-- A renovação do token também falha (credenciais inválidas, problema no servidor, etc.)
-- Múltiplas requisições simultâneas tentam renovar o token
+```typescript
+import { NortusHttpAdapter } from './NortusHttpAdapter';
 
-Pode ocorrer um loop infinito de tentativas de renovação, causando:
-- Múltiplas requisições desnecessárias
-- Sobrecarga no servidor
-- Degradação de performance
+// Com baseUrl
+const adapter = new NortusHttpAdapter('https://api.example.com');
 
-### Solução Implementada
+// Com baseUrl e maxRetries
+const adapter = new NortusHttpAdapter('https://api.example.com', 3);
+```
 
-Foi implementado um sistema de `maxRetries` que:
-- Limita o número de tentativas de renovação por requisição
-- Evita loops infinitos mesmo em cenários de falha contínua
-- Garante que erros de autenticação sejam propagados corretamente após esgotar as tentativas
+### Parâmetros do Construtor
 
-**Configuração padrão:** Máximo de 1 retry por requisição (tentativa inicial + 1 renovação)
+- `baseUrl` (opcional): URL base da API. Se não fornecido, será uma string vazia.
+- `maxRetries` (opcional, padrão: 1): Número máximo de tentativas para erros transient (5xx).
+
+### Autenticação
+
+O adapter **não gerencia autenticação**. A autenticação é gerenciada em outra camada da aplicação através de cookies. O adapter apenas realiza as requisições HTTP sem se preocupar com autenticação.
+
+## Métodos HTTP
+
+### GET
+
+```typescript
+const result = await adapter.get<ResponseType>('/endpoint');
+```
+
+### POST
+
+```typescript
+const payload = { name: 'John', email: 'john@example.com' };
+const result = await adapter.post<ResponseType, typeof payload>('/users', payload);
+```
+
+### PUT
+
+```typescript
+const payload = { name: 'Jane', email: 'jane@example.com' };
+const result = await adapter.put<ResponseType, typeof payload>('/users/1', payload);
+```
+
+### DELETE
+
+```typescript
+const result = await adapter.delete<ResponseType>('/users/1');
+```
+
+## Retries Automáticos
+
+O adapter realiza retries automáticos para erros transient (5xx). O número máximo de retries é configurado via parâmetro `maxRetries` no construtor (padrão: 1). Erros 4xx não são retentados.
+
+## URLs
+
+URLs que começam com `http://` ou `https://` são usadas como estão. Caso contrário, são concatenadas com o `baseUrl`.
+
+## Tratamento de Erros
+
+O adapter lança erros para status não-ok, erros de rede ou falhas ao parsear JSON.
