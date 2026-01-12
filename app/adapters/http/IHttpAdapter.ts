@@ -1,0 +1,6 @@
+export interface IHttpAdapter {
+  get<TResponse>(url: string): Promise<TResponse>;
+  post<TResponse, TBody>(url: string, data: TBody): Promise<TResponse>;
+  put<TResponse, TBody>(url: string, data: TBody): Promise<TResponse>;
+  delete<TResponse>(url: string): Promise<TResponse>;
+}
