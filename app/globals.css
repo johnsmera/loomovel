@@ -2,7 +2,7 @@
 @import "./theme.css";
 
 body {
-  background: #0B1125;
-  color: #E0F7FF;
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-dark-1000);
+  color: var(--color-light);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

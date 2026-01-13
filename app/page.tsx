@@ -1,7 +1,5 @@
+import { LoginScreen } from "./screens/login/LoginScreen";
+
 export default function Home() {
-  return (
-    <div>
-      <h1>Bem-vindo</h1>
-    </div>
-  );
+  return <LoginScreen />;
 }
