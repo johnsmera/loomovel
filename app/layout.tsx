@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import { Suspense } from "react";
+import { Toaster } from "sonner";
 import { SkeletonCard } from "./components/ui/skeleton/SkeletonCard";
 import { ErrorBoundary } from "./components/ui/error/ErrorBoundary";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-950 text-gray-100`}
+        className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-gray-950 text-gray-100`}
       >
         <ErrorBoundary>
           <Suspense
@@ -42,6 +44,7 @@ export default function RootLayout({
           >
             {children}
           </Suspense>
+          <Toaster position="top-right" richColors />
         </ErrorBoundary>
       </body>
     </html>
