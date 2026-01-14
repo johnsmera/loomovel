@@ -1,15 +1,26 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Logo } from "../../components/ui/brand/Logo";
 import { LoginForm } from "./LoginForm";
 import { LoginHeader } from "./LoginHeader";
 import { LoginIllustration } from "./LoginIllustration";
 import { type LoginFormData } from "./loginSchema";
+import { loginAction } from "../../actions/auth/login-action";
 
 export function LoginScreen() {
+  const router = useRouter();
+
   const handleLogin = async (data: LoginFormData) => {
-    // TODO: Implementar a lógica de autenticação via server action
-    console.log("Login attempt:", data);
+    const result = await loginAction(data.username, data.password);
+
+    if (result.success) {
+      toast.success("Login realizado com sucesso!");
+      router.push("/dash");
+    } else {
+      toast.error(result.error);
+    }
   };
 
   return (

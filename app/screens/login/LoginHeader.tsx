@@ -13,7 +13,9 @@ export function LoginHeader({
 }: LoginHeaderProps) {
   return (
     <header className={cn("flex flex-col gap-2", className)}>
-      <h2 className="text-2xl font-semibold text-light">{title}</h2>
+      <h2 className="text-2xl font-normal text-light" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+        {title}
+      </h2>
       <p className="text-light/60 text-sm">{subtitle}</p>
     </header>
   );
