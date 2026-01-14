@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 import { authUsecase } from "@/app/usecases/auth/auth-usecase";
-import { tokenStore } from "@/app/lib/token-store";
 
 type LoginActionResult =
   | { success: true; username: string }
@@ -15,18 +14,25 @@ export async function loginAction(
   try {
     const result = await authUsecase.login({ username, password });
 
-    if (!result.accessToken) {
+    if (!result.encryptedToken) {
       return {
         success: false,
         error: "Token de acesso não recebido",
       };
     }
 
-    // Salvar token no servidor (mapeado por username)
-    tokenStore.setToken(username, result.accessToken);
-
-    // Salvar apenas o username no cookie (não o token)
+    // Salvar token criptografado no cookie (já vem criptografado do usecase)
     const cookieStore = await cookies();
+    
+    cookieStore.set("token", result.encryptedToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 dias
+    });
+
+    // Salvar username também para referência
     cookieStore.set("auth", username, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

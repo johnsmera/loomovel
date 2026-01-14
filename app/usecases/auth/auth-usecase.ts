@@ -1,5 +1,7 @@
 import { IHttpAdapter } from "@/app/adapters/http/IHttpAdapter";
 import { nortusHttpAdapter } from "@/app/adapters/http/implementations/nortus/NortusHttpAdapter";
+import { IEncrypterAdapter } from "@/app/adapters/encrypter/IEncrypterAdapter";
+import { tokenEncrypterAdapter } from "@/app/adapters/encrypter/implementations/TokenEncrypterAdapter";
 
 type LoginAPIResponse = {
   access_token: string;
@@ -16,11 +18,14 @@ type LoginUsecaseInput = {
 };
 
 type LoginUsecaseOutput = {
-  accessToken: string;
+  encryptedToken: string;
 };
 
 class AuthUsecase {
-  constructor(private readonly httpClient: IHttpAdapter) {}
+  constructor(
+    private readonly httpClient: IHttpAdapter,
+    private readonly encrypter: IEncrypterAdapter
+  ) {}
 
   async login({ password, username }: LoginUsecaseInput) {
     const response = await this.httpClient.post<
@@ -35,12 +40,14 @@ class AuthUsecase {
       throw new Error("Login failed");
     }
 
+    const encryptedToken = this.encrypter.encrypt(response.access_token);
+
     const output: LoginUsecaseOutput = {
-      accessToken: response.access_token,
+      encryptedToken,
     };
 
     return output;
   }
 }
 
-export const authUsecase = new AuthUsecase(nortusHttpAdapter);
+export const authUsecase = new AuthUsecase(nortusHttpAdapter, tokenEncrypterAdapter);

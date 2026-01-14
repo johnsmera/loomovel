@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
 
 export function SidebarNav() {
   return (
-    <nav className="flex flex-col items-center gap-2 py-4">
+    <nav className="flex flex-col items-center gap-2">
       {navItems.map((item) => (
         <SidebarNavItem
           key={item.href}

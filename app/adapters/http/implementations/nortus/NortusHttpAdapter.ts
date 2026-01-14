@@ -54,7 +54,11 @@ export class NortusHttpAdapter implements IHttpAdapter {
     });
   }
 
-  async post<TResponse, TBody>(url: string, data: TBody, options?: RequestInit): Promise<TResponse> {
+  async post<TResponse, TBody>(
+    url: string,
+    data: TBody,
+    options?: RequestInit
+  ): Promise<TResponse> {
     return this.request<TResponse>(url, {
       ...options,
       method: "POST",
@@ -62,7 +66,11 @@ export class NortusHttpAdapter implements IHttpAdapter {
     });
   }
 
-  async put<TResponse, TBody>(url: string, data: TBody, options?: RequestInit): Promise<TResponse> {
+  async put<TResponse, TBody>(
+    url: string,
+    data: TBody,
+    options?: RequestInit
+  ): Promise<TResponse> {
     return this.request<TResponse>(url, {
       ...options,
       method: "PUT",
@@ -70,7 +78,10 @@ export class NortusHttpAdapter implements IHttpAdapter {
     });
   }
 
-  async delete<TResponse>(url: string, options?: RequestInit): Promise<TResponse> {
+  async delete<TResponse>(
+    url: string,
+    options?: RequestInit
+  ): Promise<TResponse> {
     return this.request<TResponse>(url, {
       ...options,
       method: "DELETE",

@@ -1,10 +1,107 @@
 @import "tailwindcss";
 @import "./theme.css";
+@import "ol/ol.css";
 
 body {
   background: var(--color-dark-1000);
   color: var(--color-light);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+/* Estilos para OpenLayers */
+.ol-viewport {
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+.ol-map {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+/* Garantir que o canvas do OpenLayers seja visível */
+.ol-viewport canvas {
+  display: block !important;
+}
+
+/* Estilo mobile-style dark mode (Google Maps / Apple Maps) */
+.map-dark-blue {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d1b2a;
+}
+
+/* Filtro que imita o visual do Google Maps / Apple Maps dark mode */
+.map-tiles-dark-blue {
+  filter: 
+    invert(1) 
+    hue-rotate(180deg) 
+    brightness(1.1) 
+    contrast(0.85) 
+    saturate(0.8)
+    sepia(0.15);
+}
+
+.ol-control {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 4px;
+}
+
+.ol-control button {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.ol-control button:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.ol-attribution {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ol-attribution a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Estilos para popup do OpenLayers */
+.ol-popup {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 200px;
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.ol-popup-content {
+  color: #1a1a1a;
+}
+
+.ol-popup:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid rgba(255, 255, 255, 0.95);
 }
 
 /* Neutralizar estilos de autocomplete/autofill do navegador */
