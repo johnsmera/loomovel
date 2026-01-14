@@ -137,6 +137,56 @@ describe('NortusHttpAdapter', () => {
       );
     });
 
+    it('deve aceitar headers customizados via options', async () => {
+      const adapter = new NortusHttpAdapter('https://api.example.com');
+      const response = createMockResponse<ApiResponse>({ data: 'auth-result' }, 200);
+      (global.fetch as MockFetch).mockResolvedValueOnce(response);
+
+      const result = await adapter.get<ApiResponse>('/users', {
+        headers: {
+          Authorization: 'Bearer token123',
+        },
+      });
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://api.example.com/users',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer token123',
+          }),
+        })
+      );
+      expect(result).toEqual({ data: 'auth-result' });
+    });
+
+    it('deve aceitar headers customizados em POST', async () => {
+      const adapter = new NortusHttpAdapter('https://api.example.com');
+      const response = createMockResponse<ApiResponse>({ data: 'post-auth-result' }, 200);
+      (global.fetch as MockFetch).mockResolvedValueOnce(response);
+
+      const payload = { name: 'John' };
+      const result = await adapter.post<ApiResponse, typeof payload>('/users', payload, {
+        headers: {
+          Authorization: 'Bearer token123',
+        },
+      });
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://api.example.com/users',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer token123',
+          }),
+        })
+      );
+      expect(result).toEqual({ data: 'post-auth-result' });
+    });
+
     it('deve lançar erro quando requisição retorna status não-ok', async () => {
       const adapter = new NortusHttpAdapter('https://api.example.com');
       const errorResponse = createMockResponse<ApiResponse>({ data: 'error' }, 400);

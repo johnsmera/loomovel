@@ -1,6 +1,6 @@
 import { IHttpAdapter } from "../../IHttpAdapter";
 
-class NortusHttpAdapter implements IHttpAdapter {
+export class NortusHttpAdapter implements IHttpAdapter {
   private baseUrl: string;
   private readonly maxRetries: number;
 

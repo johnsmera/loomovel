@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { authUsecase } from "@/app/usecases/auth/auth-usecase";
+import { tokenStore } from "@/app/lib/token-store";
 
 type LoginActionResult =
   | { success: true; username: string }
@@ -21,8 +22,12 @@ export async function loginAction(
       };
     }
 
+    // Salvar token no servidor (mapeado por username)
+    tokenStore.setToken(username, result.accessToken);
+
+    // Salvar apenas o username no cookie (não o token)
     const cookieStore = await cookies();
-    cookieStore.set("auth", result.accessToken, {
+    cookieStore.set("auth", username, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

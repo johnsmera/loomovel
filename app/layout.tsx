@@ -44,7 +44,7 @@ export default function RootLayout({
           >
             {children}
           </Suspense>
-          <Toaster position="top-right" richColors />
+          <Toaster position="bottom-center" richColors />
         </ErrorBoundary>
       </body>
     </html>
