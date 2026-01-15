@@ -30,7 +30,7 @@ export function ChatSkeleton() {
       </header>
 
       {/* Main Content - Centralizado */}
-      <div className="flex-1 flex flex-col items-center pt-16 pb-8 px-8 min-h-0">
+      <div className="flex-1 flex flex-col items-center pt-24 pb-8 px-8 min-h-0">
         {/* Chat Container */}
         <div className="w-full max-w-3xl flex-1 flex flex-col bg-sidebar/80 rounded-2xl overflow-hidden mb-6 min-h-0">
           {/* Messages Area - Scroll interno */}
