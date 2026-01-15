@@ -12,6 +12,7 @@ Projeto Next.js com foco em dashboard e fluxos protegidos.
 ```bash
 pnpm dev
 ```
+Variável de embiente: NORTUS_API_URL
 
 ## Padrões e arquitetura
 
