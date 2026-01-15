@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useRef } from "react";
 import { Card } from "@/app/components/ui/card/Card";
 import { CardHeader } from "@/app/components/ui/card/CardHeader";
 import { CardTitle } from "@/app/components/ui/card/CardTitle";
 import { CardContent } from "@/app/components/ui/card/CardContent";
 import { MapPin } from "lucide-react";
 import type { MapLocation } from "@/app/usecases/map/map-usecase";
-import { useOpenLayersMap } from "./hooks/useOpenLayersMap";
-import { calculateMapCenter, calculateMapZoom } from "./utils/mapConfig";
+import { useOpenLayersMap } from "./hooks/ui/useOpenLayersMap";
+import { useMapConfig } from "./hooks/useMapConfig";
 
 type CustomerMapProps = {
   mapLocations?: MapLocation[];
@@ -20,8 +20,7 @@ export function CustomerMap({ mapLocations = [] }: CustomerMapProps) {
   const [mapError, setMapError] = useState<string | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  const mapCenter = useMemo(() => calculateMapCenter(), []);
-  const mapZoom = useMemo(() => calculateMapZoom(mapLocations), [mapLocations]);
+  const { center: mapCenter, zoom: mapZoom } = useMapConfig(mapLocations);
 
   const { isInitialized } = useOpenLayersMap({
     containerRef: mapContainerRef as React.RefObject<HTMLDivElement>,

@@ -1,16 +1,17 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { loginSchema, type LoginFormData } from "./loginSchema";
+import { useLoginFormUI } from "./hooks/ui/useLoginFormUI";
 
 type UseLoginFormOptions = {
   onSubmit?: (data: LoginFormData) => Promise<void> | void;
 };
 
 export function useLoginForm(options?: UseLoginFormOptions) {
-  const [showPassword, setShowPassword] = useState(false);
+  const { showPassword, toggleShowPassword } = useLoginFormUI();
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -27,8 +28,6 @@ export function useLoginForm(options?: UseLoginFormOptions) {
     },
     mode: "onBlur",
   });
-
-  const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
   const onSubmitHandler = handleSubmit((data: LoginFormData) => {
     startTransition(() => {

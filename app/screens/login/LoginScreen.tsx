@@ -1,27 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Logo } from "../../components/ui/brand/Logo";
 import { LoginForm } from "./LoginForm";
 import { LoginHeader } from "./LoginHeader";
 import { LoginIllustration } from "./LoginIllustration";
-import { type LoginFormData } from "./loginSchema";
-import { loginAction } from "../../actions/auth/login-action";
+import { useLogin } from "./hooks/useLogin";
 
 export function LoginScreen() {
-  const router = useRouter();
-
-  const handleLogin = async (data: LoginFormData) => {
-    const result = await loginAction(data.username, data.password);
-
-    if (result.success) {
-      toast.success("Login realizado com sucesso!");
-      router.push("/dash");
-    } else {
-      toast.error(result.error);
-    }
-  };
+  const { handleLogin } = useLogin();
 
   return (
     <div className="h-screen w-full bg-dark-1000 flex relative overflow-hidden">

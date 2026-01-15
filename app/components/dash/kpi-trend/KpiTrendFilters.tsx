@@ -1,8 +1,7 @@
 "use client";
 
 import { cn } from "@/app/lib/tailwind_utils";
-
-type KpiType = "retenção" | "conversão" | "churn" | "arpu";
+import type { KpiType } from "./hooks/ui/useKpiSelectionUI";
 
 type KpiTrendFiltersProps = {
   selectedKpi: KpiType;

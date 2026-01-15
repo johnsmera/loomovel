@@ -43,10 +43,7 @@ export async function DashboardContent() {
         </div>
       </div>
 
-      <CustomerMap
-        data={data.activeClients}
-        mapLocations={mapData?.locations || []}
-      />
+      <CustomerMap mapLocations={mapData?.locations || []} />
     </div>
   );
 }

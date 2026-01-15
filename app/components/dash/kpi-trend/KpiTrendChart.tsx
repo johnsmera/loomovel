@@ -1,88 +1,24 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Card } from "@/app/components/ui/card/Card";
 import { CardHeader } from "@/app/components/ui/card/CardHeader";
 import { CardTitle } from "@/app/components/ui/card/CardTitle";
 import { CardContent } from "@/app/components/ui/card/CardContent";
 import { KpiTrendFilters } from "./KpiTrendFilters";
+import { useKpiSelectionUI } from "./hooks/ui/useKpiSelectionUI";
+import { useKpiDataTransform } from "./hooks/useKpiDataTransform";
+import type { KpiTrend } from "./types";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-
-type KpiTrend = {
-  labels: string[];
-  arpuTrend: {
-    name: string;
-    data: number[];
-  };
-  conversionTrend: {
-    name: string;
-    data: number[];
-  };
-  churnTrend: {
-    name: string;
-    data: number[];
-  };
-  retentionTrend: {
-    name: string;
-    data: number[];
-  };
-};
-
-type KpiType = "retenção" | "conversão" | "churn" | "arpu";
 
 type KpiTrendChartProps = {
   data: KpiTrend;
 };
 
-function formatArpuValue(value: number): string {
-  return `R$ ${(value / 1000).toFixed(1)}k`;
-}
-
-function formatPercentageValue(value: number): string {
-  return `${value.toFixed(1)}%`;
-}
-
 export function KpiTrendChart({ data }: KpiTrendChartProps) {
-  const [selectedKpi, setSelectedKpi] = useState<KpiType>("arpu");
-
-  const chartData = useMemo(() => {
-    let series;
-    let formatter;
-
-    switch (selectedKpi) {
-      case "arpu":
-        series = data.arpuTrend.data;
-        formatter = formatArpuValue;
-        break;
-      case "conversão":
-        series = data.conversionTrend.data;
-        formatter = formatPercentageValue;
-        break;
-      case "churn":
-        series = data.churnTrend.data;
-        formatter = formatPercentageValue;
-        break;
-      case "retenção":
-        series = data.retentionTrend.data;
-        formatter = formatPercentageValue;
-        break;
-      default:
-        series = data.arpuTrend.data;
-        formatter = formatArpuValue;
-    }
-
-    return {
-      series: [
-        {
-          name: selectedKpi.charAt(0).toUpperCase() + selectedKpi.slice(1),
-          data: series,
-        },
-      ],
-      formatter,
-    };
-  }, [selectedKpi, data]);
+  const { selectedKpi, setSelectedKpi } = useKpiSelectionUI("arpu");
+  const chartData = useKpiDataTransform(data, selectedKpi);
 
   const chartOptions = {
     chart: {
