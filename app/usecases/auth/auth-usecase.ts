@@ -1,7 +1,7 @@
-import { IHttpAdapter } from "@/app/adapters/http/IHttpAdapter";
-import { nortusHttpAdapter } from "@/app/adapters/http/implementations/nortus/NortusHttpAdapter";
-import { IEncrypterAdapter } from "@/app/adapters/encrypter/IEncrypterAdapter";
-import { tokenEncrypterAdapter } from "@/app/adapters/encrypter/implementations/TokenEncrypterAdapter";
+import { IHttpAdapter } from "@/app/@adapters/http/IHttpAdapter";
+import { nortusHttpAdapter } from "@/app/@adapters/http/implementations/nortus/NortusHttpAdapter";
+import { IEncrypterAdapter } from "@/app/@adapters/encrypter/IEncrypterAdapter";
+import { tokenEncrypterAdapter } from "@/app/@adapters/encrypter/implementations/TokenEncrypterAdapter";
 
 type LoginAPIResponse = {
   access_token: string;

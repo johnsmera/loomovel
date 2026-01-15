@@ -1,5 +1,5 @@
-import { IHttpAdapter } from "@/app/adapters/http/IHttpAdapter";
-import { nortusHttpAdapter } from "@/app/adapters/http/implementations/nortus/NortusHttpAdapter";
+import { IHttpAdapter } from "@/app/@adapters/http/IHttpAdapter";
+import { nortusHttpAdapter } from "@/app/@adapters/http/implementations/nortus/NortusHttpAdapter";
 
 type DashboardAPIResponse = {
   kpisTrend: {
