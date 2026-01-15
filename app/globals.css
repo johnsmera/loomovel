@@ -176,3 +176,37 @@ input:-webkit-autofill::first-line {
   font-size: inherit;
   font-family: inherit;
 }
+
+/* Estilos customizados para Toast de Sucesso */
+[data-sonner-toast][data-type="success"],
+[data-rich-colors][data-sonner-toast][data-type="success"] {
+  background-color: #1876D2 !important;
+  border: none !important;
+  color: white !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-title],
+[data-rich-colors][data-sonner-toast][data-type="success"] [data-title] {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-description],
+[data-rich-colors][data-sonner-toast][data-type="success"] [data-description] {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-sonner-toast][data-type="success"] svg,
+[data-rich-colors][data-sonner-toast][data-type="success"] svg {
+  color: white !important;
+}
+
+[data-sonner-toast][data-type="success"] button[data-close-button],
+[data-rich-colors][data-sonner-toast][data-type="success"] button[data-close-button] {
+  color: white !important;
+}
+
+[data-sonner-toast][data-type="success"] button[data-close-button]:hover,
+[data-rich-colors][data-sonner-toast][data-type="success"] button[data-close-button]:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}

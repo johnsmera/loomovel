@@ -78,6 +78,18 @@ export class NortusHttpAdapter implements IHttpAdapter {
     });
   }
 
+  async patch<TResponse, TBody>(
+    url: string,
+    data: TBody,
+    options?: RequestInit
+  ): Promise<TResponse> {
+    return this.request<TResponse>(url, {
+      ...options,
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  }
+
   async delete<TResponse>(
     url: string,
     options?: RequestInit

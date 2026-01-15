@@ -3,6 +3,7 @@ import { getMapLocationsAction } from "@/app/actions/map/get-map-locations-actio
 import { KpiTrendChart } from "@/app/components/dash/kpi-trend/KpiTrendChart";
 import { ConversionRateChart } from "@/app/components/dash/conversion-rate/ConversionRateChart";
 import { CustomerMap } from "@/app/components/dash/customer-map/CustomerMap";
+import { PageHeader } from "@/app/components/ui/page-header/PageHeader";
 
 export async function DashboardContent() {
   const [dashboardResult, mapResult] = await Promise.all([
@@ -12,8 +13,8 @@ export async function DashboardContent() {
 
   if (!dashboardResult.success) {
     return (
-      <div className="p-8">
-        <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-6">
+        <div className="py-8">
+          <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-6">
           <h2 className="text-xl font-semibold text-red-400 mb-2">
             Erro ao carregar dados
           </h2>
@@ -27,7 +28,13 @@ export async function DashboardContent() {
   const mapData = mapResult.success ? mapResult.data : null;
 
   return (
-    <div className="p-8 space-y-8">
+    <>
+      {/* Page Header */}
+      <PageHeader>
+        <PageHeader.Title>Dashboard</PageHeader.Title>
+      </PageHeader>
+
+      <div className="py-8 pt-24 space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-8">
           <KpiTrendChart data={data.kpisTrend} />
@@ -44,6 +51,7 @@ export async function DashboardContent() {
       </div>
 
       <CustomerMap mapLocations={mapData?.locations || []} />
-    </div>
+      </div>
+    </>
   );
 }

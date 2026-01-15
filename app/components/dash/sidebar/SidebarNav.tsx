@@ -6,6 +6,7 @@ import {
   MessageSquare,
   User,
   Calendar,
+  Ticket,
 } from "lucide-react";
 import { SidebarNavItem } from "./SidebarNavItem";
 
@@ -17,6 +18,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: "/dash", icon: LineChart, label: "Dashboard" },
+  { href: "/tickets", icon: Ticket, label: "Tickets" },
   { href: "/dash/lojas", icon: Building2, label: "Lojas" },
   { href: "/dash/chat", icon: MessageSquare, label: "Chat" },
   { href: "/dash/perfil", icon: User, label: "Perfil" },
