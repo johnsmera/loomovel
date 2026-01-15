@@ -2,11 +2,9 @@
 
 import {
   LineChart,
-  Building2,
   MessageSquare,
-  User,
-  Calendar,
   Ticket,
+  Calculator,
 } from "lucide-react";
 import { SidebarNavItem } from "./SidebarNavItem";
 
@@ -20,14 +18,12 @@ const navItems: NavItem[] = [
   { href: "/dash", icon: LineChart, label: "Dashboard" },
   { href: "/tickets", icon: Ticket, label: "Tickets" },
   { href: "/chat", icon: MessageSquare, label: "Chat" },
-  { href: "/dash/lojas", icon: Building2, label: "Lojas" },
-  { href: "/dash/perfil", icon: User, label: "Perfil" },
-  { href: "/dash/calendario", icon: Calendar, label: "Calendário" },
+  { href: "/simulator", icon: Calculator, label: "Simulador" },
 ];
 
 export function SidebarNav() {
   return (
-    <nav className="flex flex-col items-center gap-2">
+    <nav className="flex flex-col items-center gap-6">
       {navItems.map((item) => (
         <SidebarNavItem
           key={item.href}
