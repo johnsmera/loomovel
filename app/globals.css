@@ -210,3 +210,15 @@ input:-webkit-autofill::first-line {
 [data-rich-colors][data-sonner-toast][data-type="success"] button[data-close-button]:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
+
+/* Estilos para scrollbar invisível - Chat */
+.scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+  /* Safari e Chrome */
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
