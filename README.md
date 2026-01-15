@@ -1,19 +1,45 @@
 # Loomovel
 
-Projeto Next.js
+Projeto Next.js com foco em dashboard e fluxos protegidos.
 
-## Design Patterns e Princípios
+## Requisitos
 
-Este projeto utiliza como guias de design:
+- Node.js LTS
+- pnpm
 
-- **Composite Pattern**: Aplicado no React para construção de componentes de forma atômica e composável, permitindo a criação de interfaces complexas através da combinação de componentes menores e reutilizáveis.
-
-- **Stateless**: Os componentes são desenvolvidos seguindo o princípio de stateless (sem estado interno), priorizando componentes funcionais puros que recebem props e retornam JSX, facilitando testes, manutenção e previsibilidade.
-
-## Desenvolvimento
-
-> Observação: apesar de o fluxo de trabalho seguir o Git Flow, os Pull Requests não foram abertos formalmente por se tratar de um repositório individual, sem processo real de code review.
+## Rodar local
 
 ```bash
 pnpm dev
 ```
+
+## Padrões e arquitetura
+
+- **Composite**: composição de componentes atômicos.
+- **Stateless**: preferência por componentes funcionais puros.
+- **Adapter Pattern**: camada HTTP isolada para integrações externas.
+
+## HTTP Adapter (Nortus)
+
+- Adapter HTTP simples sem autenticação.
+- Permite mockar requisições em testes sem tocar no `fetch`.
+- Suporte a `GET`, `POST`, `PUT`, `DELETE` com retries para 5xx.
+- `baseUrl` opcional e `maxRetries` configurável.
+
+## Error Boundary
+
+- Captura erros de renderização e lifecycle no client.
+- Não captura erros em handlers, async fora do React, SSR ou no próprio boundary.
+- Use fallbacks específicos e boundaries granulares.
+- Para Server Components, use `error.tsx`.
+
+## Suspense
+
+- Uso com Server Components assíncronos.
+- Fallbacks alinhados ao layout (skeletons).
+- Boundaries por seção para carregamento progressivo.
+- Suspense no layout é útil, mas não substitui boundaries locais.
+
+## Desenvolvimento
+
+Fluxo segue Git Flow, sem PRs formais por ser repositório individual.
